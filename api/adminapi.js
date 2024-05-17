@@ -14,6 +14,73 @@ adminApp.use((req,res,next)=>{
     next()
 })
 
+
+//regitration
+adminApp.post('/Register',expressAsyncHandler(async(req,res)=>{
+    const newUser=req.body;
+    const dbuser=await admincollection.findOne({username:newUser.username})
+    if(dbuser!==null){
+        res.send({message:"admin already existed"})
+    }else{
+        const hashedPassword=await bcryptjs.hash(newUser.password,8)
+        newUser.password=hashedPassword;
+        await admincollection.insertOne(newUser)
+        res.send({message:"admin created"})
+    }
+}))
+
+//admin login
+adminApp.post('/login',expressAsyncHandler(async(req,res)=>{
+    const userCred=req.body;
+    const dbuser=await admincollection.findOne({username:userCred.username})
+    if(dbuser===null){
+        res.send({message:"Invalid username"})
+    }else{
+        const status=await bcryptjs.compare(userCred.password,dbuser.password)
+        if(status===false){
+            res.send({message:"Invalid password"})
+        }else{
+            const signedToken=jsonwebtoken.sign({username:dbuser.username},process.env.SECRET_KEY,{expiresIn:'1d'})
+            res.send({message:"login success",token:signedToken,user:dbuser})
+        }
+    }
+}))
+//managing password
+adminApp.post('/manage_password', expressAsyncHandler(async (req, res) => {
+    const { password, newPassword } = req.body;
+    const username = req.body.username; // Assuming the username is sent in the request body
+
+    if (!username) {
+        res.status(400).send({ message: "Username is required" });
+        return;
+    }
+
+    const dbUser = await admincollection.findOne({ username: username });
+    if (!dbUser) {
+        res.status(404).send({ message: "User not found" });
+        return;
+    }
+
+    const isPasswordValid = await bcryptjs.compare(password, dbUser.password);
+    if (!isPasswordValid) {
+        res.status(401).send({ message: "Invalid password" });
+        return;
+    }
+
+    const isNewPasswordSameAsOld = await bcryptjs.compare(newPassword, dbUser.password);
+    if (isNewPasswordSameAsOld) {
+        res.status(400).send({ message: "New password cannot be the same as the old password" });
+        return;
+    }
+
+    const hashedNewPassword = await bcryptjs.hash(newPassword, 8);
+    await admincollection.updateOne({ username: username }, { $set: { password: hashedNewPassword } });
+    res.send({ message: "Password updated successfully" });
+}));
+
+
+
+
 adminApp.get('/get-sdp-records',async (req,res)=>{
     let records;
     records = await sdpcollection.find().toArray();

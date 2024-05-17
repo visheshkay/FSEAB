@@ -1,4 +1,37 @@
+###
+//faculty registering
+post http://localhost:4000/faculty-api/faci
+Content-Type: application/json
 
+{
+    "facultyId":"516",
+    "username":"rajesh",
+    "password":"rajesh",
+    "email":"rajesh@mail.com",
+    "phone":"9534569871"
+
+}
+###
+//faculty login
+post http://localhost:4000/faculty-api/login
+Content-Type: application/json
+
+
+{
+    "facultyId":"516",
+    "username":"rajesh",
+    "password":"rajesh yadav"
+}
+
+###
+post http://localhost:4000/faculty-api/manage_passwords
+Content-Type: application/json
+
+{
+    "username":"rajesh",
+    "password":"rajesh yadav",
+    "newPassword":"rajesh"
+}
 // upload faculty sdp data
 POST http://localhost:4000/faculty-api/sdpdata
 Content-Type: application/json

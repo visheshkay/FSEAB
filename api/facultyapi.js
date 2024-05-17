@@ -8,12 +8,82 @@ require('dotenv').config()
 const exp = require('express')
 const facultyApp = exp.Router()
 
+let sdpcollection;
+let reviewcollection;
+let facultycollection;
 //faculty collection object
 facultyApp.use((req,res,next)=>{
     sdpcollection=req.app.get('sdpcollection')
     reviewcollection=req.app.get('reviewcollection')
+    facultycollection=req.app.get('facultycollection')
     next();
 });
+
+//faculty registration 
+facultyApp.post('/faci',expressAsyncHandler(async(req,res)=>{
+    const newUser=req.body;
+    const dbuser=await facultycollection.findOne({username:newUser.username})
+    if(dbuser!==null){
+        res.send({message:"faculty already existed"})
+    }else{
+        const hashedPassword=await bcryptjs.hash(newUser.password,8)
+        newUser.password=hashedPassword;
+        await facultycollection.insertOne(newUser)
+        res.send({message:"Faculty created"})
+    }
+}))
+
+//faculty login
+facultyApp.post('/login',expressAsyncHandler(async(req,res)=>{
+    const userCred=req.body;
+    const dbuser=await facultycollection.findOne({username:userCred.username})
+    if(dbuser===null){
+        res.send({message:"Invalid username"})
+    }else{
+        const status=await bcryptjs.compare(userCred.password,dbuser.password)
+        if(status===false){
+            res.send({message:"Invalid password"})
+        }else{
+            const signedToken=jsonwebtoken.sign({username:dbuser.username},process.env.SECRET_KEY,{expiresIn:'1d'})
+            res.send({message:"login success",token:signedToken,user:dbuser})
+        }
+    }
+}))
+
+//managing password
+facultyApp.post('/manage_passwords', expressAsyncHandler(async (req, res) => {
+    const { password, newPassword } = req.body;
+    const username = req.body.username; // Assuming the username is sent in the request body
+
+    if (!username) {
+        res.status(400).send({ message: "Username is required" });
+        return;
+    }
+
+    const dbUser = await facultycollection.findOne({ username: username });
+    if (!dbUser) {
+        res.status(404).send({ message: "User not found" });
+        return;
+    }
+
+    const isPasswordValid = await bcryptjs.compare(password, dbUser.password);
+    if (!isPasswordValid) {
+        res.status(401).send({ message: "Invalid password" });
+        return;
+    }
+
+    const isNewPasswordSameAsOld = await bcryptjs.compare(newPassword, dbUser.password);
+    if (isNewPasswordSameAsOld) {
+        res.status(400).send({ message: "New password cannot be the same as the old password" });
+        return;
+    }
+
+    const hashedNewPassword = await bcryptjs.hash(newPassword, 8);
+    await facultycollection.updateOne({ username: username }, { $set: { password: hashedNewPassword } });
+    res.send({ message: "Password updated successfully" });
+}));
+
+
 
 // upload faculty sdp data
 facultyApp.post('/sdpdata',expressAsyncHandler(async(req,res)=>{

@@ -1,3 +1,38 @@
+###
+
+
+post http://localhost:4000/admin-api/Register
+Content-Type: application/json
+
+{
+    "adminId":"643",
+    "facultyId":"519",
+    "username":"rohit",
+    "password":"rohit",
+    "email":"rohit@mail.com",
+    "phone":"9876512340"
+}
+
+###
+post http://localhost:4000/admin-api/login
+Content-Type: application/json
+
+{
+    "adminId":"643",
+    "username":"rohit",
+    "password":"ROhit"
+}
+
+###
+post http://localhost:4000/admin-api/manage_password
+Content-Type: application/json
+
+{
+    "username":"rohit",
+    "password":"ROhit",
+    "newPassword":"rohit"
+}
+###
 GET http://localhost:4000/admin-api/get-sdp-records
 ###
 GET http://localhost:4000/admin-api/get-sdp-records/22A1578

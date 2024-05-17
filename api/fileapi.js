@@ -66,7 +66,7 @@ conn.once('open', () => {
         if (!file || file.length === 0) {
             return res.status(404).json({ err: 'No file exists' });
         }
-        const readstream = gfs.createReadStream({filename: file.filename});
+        const readstream = await gfs.createReadStream({filename: file.filename});
         readstream.pipe(res);
     } catch (err) {
         console.log(err)
