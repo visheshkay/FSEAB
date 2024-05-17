@@ -1,7 +1,7 @@
 ###
 
 
-post http://localhost:4000/admin-api/Register
+post http://localhost:4000/admin-api/new-admin
 Content-Type: application/json
 
 {
@@ -18,13 +18,13 @@ post http://localhost:4000/admin-api/login
 Content-Type: application/json
 
 {
-    "adminId":"643",
+    "facultyId":"519",
     "username":"rohit",
     "password":"Rohit Sharma"
 }
 
 ###
-post http://localhost:4000/admin-api/manage_password
+post http://localhost:4000/admin-api/change-password
 Content-Type: application/json
 
 {

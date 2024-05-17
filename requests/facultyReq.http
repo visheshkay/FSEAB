@@ -1,6 +1,6 @@
 ###
 //faculty registering
-post http://localhost:4000/faculty-api/faci
+post http://localhost:4000/faculty-api/new-faculty
 Content-Type: application/json
 
 {
@@ -16,15 +16,13 @@ Content-Type: application/json
 post http://localhost:4000/faculty-api/login
 Content-Type: application/json
 
-
 {
     "facultyId":"516",
-    "username":"rajesh",
     "password":"Rajesh"
 }
 
 ###
-post http://localhost:4000/faculty-api/manage_passwords
+post http://localhost:4000/faculty-api/change-password
 Content-Type: application/json
 
 {

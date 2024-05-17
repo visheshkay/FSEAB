@@ -20,9 +20,9 @@ facultyApp.use((req,res,next)=>{
 });
 
 //faculty registration 
-facultyApp.post('/faci',expressAsyncHandler(async(req,res)=>{
+facultyApp.post('/new-faculty',expressAsyncHandler(async(req,res)=>{
     const newUser=req.body;
-    const dbuser=await facultycollection.findOne({username:newUser.username})
+    const dbuser=await facultycollection.findOne({facultyId:newUser.facultyId})
     if(dbuser!==null){
         res.send({message:"faculty already existed"})
     }else{
@@ -36,7 +36,7 @@ facultyApp.post('/faci',expressAsyncHandler(async(req,res)=>{
 //faculty login
 facultyApp.post('/login',expressAsyncHandler(async(req,res)=>{
     const userCred=req.body;
-    const dbuser=await facultycollection.findOne({username:userCred.username})
+    const dbuser=await facultycollection.findOne({facultyId:userCred.facultyId})
     if(dbuser===null){
         res.send({message:"Invalid username"})
     }else{
@@ -51,7 +51,7 @@ facultyApp.post('/login',expressAsyncHandler(async(req,res)=>{
 }))
 
 //managing password
-facultyApp.post('/manage_passwords', expressAsyncHandler(async (req, res) => {
+facultyApp.post('/change-password', expressAsyncHandler(async (req, res) => {
     const { password, newPassword } = req.body;
     const facultyId = req.body.facultyId; // Assuming the username is sent in the request body
 

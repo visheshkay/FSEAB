@@ -18,9 +18,9 @@ adminApp.use((req,res,next)=>{
 
 
 //regitration
-adminApp.post('/Register',expressAsyncHandler(async(req,res)=>{
+adminApp.post('/new-admin',expressAsyncHandler(async(req,res)=>{
     const newUser=req.body;
-    const dbuser=await admincollection.findOne({username:newUser.username})
+    const dbuser=await admincollection.findOne({facultyId:newUser.facultyId})
     if(dbuser!==null){
         res.send({message:"admin already existed"})
     }else{
@@ -34,7 +34,7 @@ adminApp.post('/Register',expressAsyncHandler(async(req,res)=>{
 //admin login
 adminApp.post('/login',expressAsyncHandler(async(req,res)=>{
     const userCred=req.body;
-    const dbuser=await admincollection.findOne({username:userCred.username})
+    const dbuser=await admincollection.findOne({facultyId:userCred.facultyId})
     if(dbuser===null){
         res.send({message:"Invalid username"})
     }else{
@@ -48,7 +48,7 @@ adminApp.post('/login',expressAsyncHandler(async(req,res)=>{
     }
 }))
 //managing password
-adminApp.post('/manage_password', expressAsyncHandler(async (req, res) => {
+adminApp.post('/change-password', expressAsyncHandler(async (req, res) => {
     const { password, newPassword } = req.body;
     const facultyId = req.body.facultyId; // Assuming the username is sent in the request body
 
