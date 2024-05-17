@@ -2,6 +2,8 @@ const exp = require('express')
 const app = exp()
 require('dotenv').config()
 const mc = require('mongodb').MongoClient;
+const mongoose = require('mongoose')
+const Grid = require('gridfs-stream')
 const path = require('path')
 app.use(exp.json())
 
@@ -22,11 +24,16 @@ mc.connect(process.env.DB_URL)
     console.log("ERROR in Database Connection")
 })
 
+
+
+
 const facultyApp = require('./api/facultyapi')
 const adminApp = require('./api/adminapi')
+const fileApp = require('./api/fileapi')
 
 app.use('/faculty-api',facultyApp)
 app.use('/admin-api',adminApp)
+app.use('/file-api',fileApp)
 
 app.use((err,req,res,next)=>{
     res.send({message:"error",payload:err.message});
