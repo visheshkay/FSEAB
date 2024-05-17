@@ -1,6 +1,8 @@
 const exp = require('express')
 const adminApp = exp.Router()
-
+const expressAsyncHandler = require('express-async-handler')
+const bcryptjs = require('bcryptjs')
+const jsonwebtoken = require('jsonwebtoken')
 let facultycollection
 let admincollection;
 let sdpcollection;
@@ -48,14 +50,14 @@ adminApp.post('/login',expressAsyncHandler(async(req,res)=>{
 //managing password
 adminApp.post('/manage_password', expressAsyncHandler(async (req, res) => {
     const { password, newPassword } = req.body;
-    const username = req.body.username; // Assuming the username is sent in the request body
+    const facultyId = req.body.facultyId; // Assuming the username is sent in the request body
 
-    if (!username) {
-        res.status(400).send({ message: "Username is required" });
+    if (!facultyId) {
+        res.status(400).send({ message: "facultyId is required" });
         return;
     }
 
-    const dbUser = await admincollection.findOne({ username: username });
+    const dbUser = await admincollection.findOne({ facultyId: facultyId });
     if (!dbUser) {
         res.status(404).send({ message: "User not found" });
         return;
@@ -74,7 +76,7 @@ adminApp.post('/manage_password', expressAsyncHandler(async (req, res) => {
     }
 
     const hashedNewPassword = await bcryptjs.hash(newPassword, 8);
-    await admincollection.updateOne({ username: username }, { $set: { password: hashedNewPassword } });
+    await admincollection.updateOne({ facultyId: facultyId }, { $set: { password: hashedNewPassword } });
     res.send({ message: "Password updated successfully" });
 }));
 

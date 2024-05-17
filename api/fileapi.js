@@ -16,7 +16,7 @@ require('dotenv').config()
 // }
 fileApp.use(bodyParser.json())
 fileApp.use(methodOverride('_method'))
-const conn = mongoose.createConnection('mongodb://localhost:27017/fseaFiledb')
+const conn = mongoose.createConnection(process.env.FILE_DB_URL)
 let gfs;
 
 conn.once('open', () => {
@@ -25,9 +25,16 @@ conn.once('open', () => {
   gfs.collection('uploads');
 });
 
+let bucket;
+conn.once('open', () => {
+  bucket = new mongoose.mongo.GridFSBucket(conn.db, {
+    bucketName: 'uploads'
+  });
+});
+
 
   const storage = new GridFsStorage({
-    url: 'mongodb://localhost:27017/fseaFiledb',
+    url: process.env.FILE_DB_URL,
     file: (req, file) => {
       return new Promise((resolve, reject) => {
         crypto.randomBytes(16, (err, buf) => {
@@ -62,15 +69,15 @@ conn.once('open', () => {
 
   fileApp.get('/get-certificate/:filename', async (req, res) => {
     try {
-        let file = await gfs.files.findOne({filename : req.params.filename})
-        if (!file || file.length === 0) {
-            return res.status(404).json({ err: 'No file exists' });
-        }
-        const readstream = await gfs.createReadStream({filename: file.filename});
-        readstream.pipe(res);
+      const filename = req.params.filename;
+      const downloadStream = bucket.openDownloadStreamByName(filename);
+      downloadStream.on('error', (err) => {
+        res.status(404).json({ err: 'File not found' });
+      });
+      downloadStream.pipe(res);
     } catch (err) {
-        console.log(err)
-        res.json({error:err})
+      console.log(err);
+      res.json({ error: err });
     }
   });
 

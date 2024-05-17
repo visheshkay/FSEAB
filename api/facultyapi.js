@@ -53,14 +53,14 @@ facultyApp.post('/login',expressAsyncHandler(async(req,res)=>{
 //managing password
 facultyApp.post('/manage_passwords', expressAsyncHandler(async (req, res) => {
     const { password, newPassword } = req.body;
-    const username = req.body.username; // Assuming the username is sent in the request body
+    const facultyId = req.body.facultyId; // Assuming the username is sent in the request body
 
-    if (!username) {
-        res.status(400).send({ message: "Username is required" });
+    if (!facultyId) {
+        res.status(400).send({ message: "facultyId is required" });
         return;
     }
 
-    const dbUser = await facultycollection.findOne({ username: username });
+    const dbUser = await facultycollection.findOne({ facultyId: facultyId });
     if (!dbUser) {
         res.status(404).send({ message: "User not found" });
         return;
@@ -79,7 +79,7 @@ facultyApp.post('/manage_passwords', expressAsyncHandler(async (req, res) => {
     }
 
     const hashedNewPassword = await bcryptjs.hash(newPassword, 8);
-    await facultycollection.updateOne({ username: username }, { $set: { password: hashedNewPassword } });
+    await facultycollection.updateOne({ facultyId: facultyId }, { $set: { password: hashedNewPassword } });
     res.send({ message: "Password updated successfully" });
 }));
 

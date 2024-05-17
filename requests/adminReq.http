@@ -20,7 +20,7 @@ Content-Type: application/json
 {
     "adminId":"643",
     "username":"rohit",
-    "password":"ROhit"
+    "password":"Rohit Sharma"
 }
 
 ###
@@ -28,9 +28,9 @@ post http://localhost:4000/admin-api/manage_password
 Content-Type: application/json
 
 {
-    "username":"rohit",
-    "password":"ROhit",
-    "newPassword":"rohit"
+    "facultyId":"519",
+    "password":"Rohit",
+    "newPassword":"Rohit Sharma"
 }
 ###
 GET http://localhost:4000/admin-api/get-sdp-records

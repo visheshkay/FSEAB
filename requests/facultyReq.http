@@ -20,7 +20,7 @@ Content-Type: application/json
 {
     "facultyId":"516",
     "username":"rajesh",
-    "password":"rajesh yadav"
+    "password":"Rajesh"
 }
 
 ###
@@ -28,11 +28,12 @@ post http://localhost:4000/faculty-api/manage_passwords
 Content-Type: application/json
 
 {
-    "username":"rajesh",
-    "password":"rajesh yadav",
-    "newPassword":"rajesh"
+    "facultyId":"516",
+    "password":"rajesh",
+    "newPassword":"Rajesh"
 }
 // upload faculty sdp data
+###
 POST http://localhost:4000/faculty-api/sdpdata
 Content-Type: application/json
 
