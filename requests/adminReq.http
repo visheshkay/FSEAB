@@ -5,12 +5,12 @@ post http://localhost:4000/admin-api/new-admin
 Content-Type: application/json
 
 {
-    "adminId":"643",
-    "facultyId":"519",
-    "username":"rohit",
-    "password":"rohit",
-    "email":"rohit@mail.com",
-    "phone":"9876512340"
+    "adminId":"001",
+    "facultyId":"22071A0523",
+    "username":"G Sai Kumar",
+    "password":"saikumar123",
+    "email":"sai@mail.com",
+    "phone":"7993945097"
 }
 
 ###
@@ -35,7 +35,7 @@ Content-Type: application/json
 ###
 GET http://localhost:4000/admin-api/get-sdp-records
 ###
-GET http://localhost:4000/admin-api/get-sdp-records/22A1578
+GET http://localhost:4000/admin-api/get-sdp-records/22071A6621
 ###
 GET http://localhost:4000/admin-api/get-review-records
 ###

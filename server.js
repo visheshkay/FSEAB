@@ -23,6 +23,7 @@ mc.connect(process.env.DB_URL)
 .catch(err=>{
     console.log("ERROR in Database Connection")
 })
+app.use(exp.static(path.join(__dirname,'../frontend/build')))
 
 
 
@@ -34,6 +35,9 @@ const fileApp = require('./api/fileapi')
 app.use('/faculty-api',facultyApp)
 app.use('/admin-api',adminApp)
 app.use('/file-api',fileApp)
+app.use((req,res,next)=>{
+    res.sendFile(path.join(__dirname,'../frontend/build/index.html'))
+})
 
 app.use((err,req,res,next)=>{
     res.send({message:"error",payload:err.message});

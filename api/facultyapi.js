@@ -38,7 +38,7 @@ facultyApp.post('/login',expressAsyncHandler(async(req,res)=>{
     const userCred=req.body;
     const dbuser=await facultycollection.findOne({facultyId:userCred.facultyId})
     if(dbuser===null){
-        res.send({message:"Invalid username"})
+        res.send({message:"Invalid id"})
     }else{
         const status=await bcryptjs.compare(userCred.password,dbuser.password)
         if(status===false){
@@ -56,25 +56,25 @@ facultyApp.post('/change-password', expressAsyncHandler(async (req, res) => {
     const facultyId = req.body.facultyId; // Assuming the username is sent in the request body
 
     if (!facultyId) {
-        res.status(400).send({ message: "facultyId is required" });
+        res.send({ message: "facultyId is required" });
         return;
     }
 
     const dbUser = await facultycollection.findOne({ facultyId: facultyId });
     if (!dbUser) {
-        res.status(404).send({ message: "User not found" });
+        res.send({ message: "User not found" });
         return;
     }
 
     const isPasswordValid = await bcryptjs.compare(password, dbUser.password);
     if (!isPasswordValid) {
-        res.status(401).send({ message: "Invalid password" });
+        res.send({ message: "Invalid password" });
         return;
     }
 
     const isNewPasswordSameAsOld = await bcryptjs.compare(newPassword, dbUser.password);
     if (isNewPasswordSameAsOld) {
-        res.status(400).send({ message: "New password cannot be the same as the old password" });
+        res.send({ message: "New password cannot be the same as the old password" });
         return;
     }
 

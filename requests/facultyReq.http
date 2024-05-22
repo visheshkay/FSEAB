@@ -4,12 +4,12 @@ post http://localhost:4000/faculty-api/new-faculty
 Content-Type: application/json
 
 {
-    "facultyId":"516",
-    "username":"rajesh",
-    "password":"rajesh",
-    "email":"rajesh@mail.com",
+    "userType":"faculty",
+    "facultyId":"22071A0564",
+    "username":"Y Saketh",
+    "password":"12345678",
+    "email":"abhishek@mail.com",
     "phone":"9534569871"
-
 }
 ###
 //faculty login
@@ -17,8 +17,8 @@ post http://localhost:4000/faculty-api/login
 Content-Type: application/json
 
 {
-    "facultyId":"516",
-    "password":"Rajesh"
+    "facultyId":"550",
+    "password":"Rushendra23"
 }
 
 ###
@@ -26,9 +26,9 @@ post http://localhost:4000/faculty-api/change-password
 Content-Type: application/json
 
 {
-    "facultyId":"516",
-    "password":"rajesh",
-    "newPassword":"Rajesh"
+    "facultyId":"550",
+    "password":"Rushendra",
+    "newPassword":"Rushendra"
 }
 // upload faculty sdp data
 ###
@@ -37,12 +37,12 @@ Content-Type: application/json
 
 {
     "sdpId":"{{$timestamp}}",
-    "facultyId":"2071A5673",
-    "title":"Blockchain Technology",
-    "topic":"",
-    "startDate":"",
-    "endDate":"",
-    "organizedBy":"",
+    "facultyId":"22071A6621",
+    "title":"Blockchain Revolution",
+    "topic":"Blockchain technology,cryptography",
+    "startDate":"2023-01-20",
+    "endDate":"2023-01-20",
+    "organizedBy":"VNRVJIET",
     "dateOfCreation":"{{$datetime iso8601}}",
     "dateOfModification":"{{$datetime iso8601}}",
     "status":true
@@ -57,9 +57,9 @@ Content-Type: application/json
 
 {
     "revId":"{{$timestamp}}",
-    "facultyId":"2071A5673",
-    "title":"Functions",
-    "roles":[],
+    "facultyId":"22071A6621",
+    "title":"Functions of AI",
+    "roles":["Reviewer","Subject Expert"],
     "startDate":"",
     "endDate":"",
     "organizedBy":"",
