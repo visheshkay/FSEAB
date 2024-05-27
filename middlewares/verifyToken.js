@@ -4,7 +4,7 @@ require('dotenv').config
 function verifyToken(req,res,next){
     //get bearer token from headers of req
     const bearerToken=req.headers.authorization;
-    console.log(bearerToken)
+    
     //if bearer token not available
     if(!bearerToken){
         return res.send({message:"Unauthorized access. Please login to continue"})

@@ -5,6 +5,7 @@ const Grid = require('gridfs-stream')
 const multer = require('multer')
 const {GridFsStorage} = require('multer-gridfs-storage')
 const bodyParser = require('body-parser')
+const verifyToken = require('../middlewares/verifyToken')
 const methodOverride = require('method-override')
 const crypto = require('crypto');
 const path = require('path');
@@ -53,11 +54,11 @@ conn.once('open', () => {
   });
   const upload = multer({ storage });
 
-  fileApp.post('/upload-certificate', upload.single('file'), (req, res) => {
+  fileApp.post('/upload-certificate',verifyToken, upload.single('file'), (req, res) => {
     res.json({ file: req.file });
   });
 
-  fileApp.get('/get-certificates', async (req, res) => {
+  fileApp.get('/get-certificates',verifyToken, async (req, res) => {
       console.log("Started")
       try {
         let files = await gfs.files.find().toArray();
@@ -74,6 +75,7 @@ conn.once('open', () => {
       downloadStream.on('error', (err) => {
         res.status(404).json({ err: 'File not found' });
       });
+      res.setHeader('Content-Type', 'image/jpeg'); // Set content type to image/jpeg
       downloadStream.pipe(res);
     } catch (err) {
       console.log(err);

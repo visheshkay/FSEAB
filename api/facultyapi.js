@@ -51,7 +51,7 @@ facultyApp.post('/login',expressAsyncHandler(async(req,res)=>{
 }))
 
 //managing password
-facultyApp.post('/change-password', expressAsyncHandler(async (req, res) => {
+facultyApp.post('/change-password',verifyToken, expressAsyncHandler(async (req, res) => {
     const { password, newPassword } = req.body;
     const facultyId = req.body.facultyId; // Assuming the username is sent in the request body
 
@@ -86,7 +86,7 @@ facultyApp.post('/change-password', expressAsyncHandler(async (req, res) => {
 
 
 // upload faculty sdp data
-facultyApp.post('/sdpdata',expressAsyncHandler(async(req,res)=>{
+facultyApp.post('/sdpdata',verifyToken,expressAsyncHandler(async(req,res)=>{
     //get new sdp object by faculty
     const sdpdata=req.body;
     //post to sdp collection
@@ -96,7 +96,7 @@ facultyApp.post('/sdpdata',expressAsyncHandler(async(req,res)=>{
 }))
 
 // upload faculty review data
-facultyApp.post('/reviewdata',expressAsyncHandler(async(req,res)=>{
+facultyApp.post('/reviewdata',verifyToken,expressAsyncHandler(async(req,res)=>{
     //get new review object by faculty
     const reviewdata=req.body;
     //post to review collection
@@ -106,7 +106,7 @@ facultyApp.post('/reviewdata',expressAsyncHandler(async(req,res)=>{
 }))
 
 // get faculty sdp data
-facultyApp.get('/sdpdata/:id',expressAsyncHandler(async(req,res)=>{
+facultyApp.get('/sdpdata/:id',verifyToken,expressAsyncHandler(async(req,res)=>{
     // get facultyname
     const fid=req.params.id
     // get all sdp data
@@ -116,7 +116,7 @@ facultyApp.get('/sdpdata/:id',expressAsyncHandler(async(req,res)=>{
 }))
 
 // get faculty review data
-facultyApp.get('/reviewdata/:id',expressAsyncHandler(async(req,res)=>{
+facultyApp.get('/reviewdata/:id',verifyToken,expressAsyncHandler(async(req,res)=>{
     // get facultyname
     const fid=req.params.id
     // get all review data

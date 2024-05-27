@@ -2,6 +2,7 @@ const exp = require('express')
 const adminApp = exp.Router()
 const expressAsyncHandler = require('express-async-handler')
 const bcryptjs = require('bcryptjs')
+const verifyToken=require('../middlewares/verifyToken')
 const jsonwebtoken = require('jsonwebtoken')
 let facultycollection
 let admincollection;
@@ -48,7 +49,7 @@ adminApp.post('/login',expressAsyncHandler(async(req,res)=>{
     }
 }))
 //managing password
-adminApp.post('/change-password', expressAsyncHandler(async (req, res) => {
+adminApp.post('/change-password',verifyToken, expressAsyncHandler(async (req, res) => {
     const { password, newPassword } = req.body;
     const facultyId = req.body.facultyId; // Assuming the username is sent in the request body
 
@@ -83,27 +84,27 @@ adminApp.post('/change-password', expressAsyncHandler(async (req, res) => {
 
 
 
-adminApp.get('/get-sdp-records',async (req,res)=>{
+adminApp.get('/get-sdp-records',verifyToken,async (req,res)=>{
     let records;
     records = await sdpcollection.find().toArray();
     res.send({message:"Records Found",payload:records})
 })
-adminApp.get('/get-sdp-records/:facultyId',async(req,res)=>{
+adminApp.get('/get-sdp-records/:facultyId',verifyToken,async(req,res)=>{
     let fid = (req.params.facultyId);
     let faculty_records = await sdpcollection.find({facultyId:{$eq:fid}}).toArray();
     res.send({message:"Faculty Records Found",payload:faculty_records})
 })
-adminApp.get('/get-review-records',async (req,res)=>{
+adminApp.get('/get-review-records',verifyToken,async (req,res)=>{
     let reviewrecords;
     reviewrecords = await reviewcollection.find().toArray();
     res.send({message:"reviewers data Found",payload:reviewrecords})
 })
-adminApp.get('/get-review-records/:facultyId',async (req,res)=>{
+adminApp.get('/get-review-records/:facultyId',verifyToken,async (req,res)=>{
     let fid = req.params.facultyId;
     let faculty_data = await reviewcollection.find({facultyId:fid}).toArray();
     res.send({message:"Faculty data Found",payload:faculty_data})
 })
-adminApp.get('/get-all-faculty-records',async (req,res)=>{
+adminApp.get('/get-all-faculty-records',verifyToken,async (req,res)=>{
     let allfaculty;
     allfaculty = await facultycollection.find().toArray();
     res.send({message:"all faculty data found",payload:allfaculty})
